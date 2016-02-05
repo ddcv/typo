@@ -3,14 +3,17 @@ Feature: Merge Articles
   in order to organize similar articles together
   I want to be able to merge articles
 
-  Background:
+
+  Scenario: non-Admin cannot Merge
     Given the blog is set up
-    And I am logged into the admin panel
+    And I am on the new article page
+    And I am not logged into the admin panel
+    Then I should not see "Merge"
 
   Scenario: Merge Articles
-    Given I am on the admin content page
-    And I see "FooBar"
-    And I see "BarFoo"
+    Given the blog is set up
+    And I am logged into the admin panel
+    And I am on the admin content page
     When I follow "Foobar"
     Then I should be on the article edit page for "FooBar"
     When I fill in "merge_article_id" with "02"

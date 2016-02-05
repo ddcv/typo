@@ -10,7 +10,7 @@
         <%= _("<strong>Password:</strong> %s", session[:tmppass]) %>
       </p>
       <p>
-        <%= _("Please <strong>write down</strong> a copy of this login and password as you will need it later.  Normally we would email it to you as %s, however email services are likely not connected.", current_user.email)%>
+        <%= _("Please <strong>write down<strong> a copy of this login and password as you will need it later.  Normally we would email it to you as %s, however email services are likely not connected.", current_user.email)%>
       </p>
       <p>
         <%= _("Proceed to %s",  link_to(_("admin"), :controller => 'admin/dashboard')) %>
