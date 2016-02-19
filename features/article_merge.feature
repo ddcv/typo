@@ -6,23 +6,23 @@ Feature: Merge Articles
 
   Scenario: non-Admin cannot Merge
     Given the blog is set up
-    And I am on the new article page
     And I am not logged into the admin panel
+    And I am on the new article page
     Then I should not see "Merge"
 
-  Scenario: Merge Articles
+  Scenario: Merged Articles have content from both articles
     Given the blog is set up
     And I am logged into the admin panel
     And I am on the admin content page
-    When I follow "Foobar"
-    Then I should be on the article edit page for "FooBar"
-    When I fill in "merge_article_id" with "02"
-    and I press "Merge"
-    Then I should be on the admin content page
-    When I go to the home page
-    Then I should see "Foobar"
-    When I follow "Foobar"
-    Then I should see "Lorem Ipsum"
-    And I should see "Text Mania"
-    And I should see "This article rules"
-    And I should see "This article sucks"
+    When I am on the edit article page for 1
+    And I fill in "merge_with" with "2"
+    And I press "Merge"
+    And I go to the edit article page for 1
+    Then I should see content for article 1
+    And I should see content for article 2
+
+  Scenario: Merged Articles have one author
+
+  Scenario: Merged Articles have comments from both articles
+
+  Scenario: Merged Articles have title from one article

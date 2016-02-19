@@ -27,6 +27,21 @@ class Admin::ContentController < Admin::BaseController
     new_or_edit
   end
 
+  def merge
+    @article = Article.merge(params[:article_id],params[:merge_with])
+    print @article.body
+    @article.save
+
+    render(:update) do |page|
+      page.replace_html('article__body_and_extended_editor', text_field_tag('article[body_and_extended]', @article.body))
+      page.replace_html('autosave', hidden_field_tag('article[id]', @article.id))
+      page.replace_html('preview_link', link_to(_("Preview"), {:controller => '/articles', :action => 'preview', :id => @article.id}, {:target => 'new', :class => 'btn info'}))
+      page.replace_html('destroy_link', link_to_destroy_draft(@article))
+    end
+
+
+  end
+
   def edit
     @article = Article.find(params[:id])
     unless @article.access_by? current_user
@@ -240,4 +255,6 @@ class Admin::ContentController < Admin::BaseController
   def setup_resources
     @resources = Resource.by_created_at
   end
+
+
 end

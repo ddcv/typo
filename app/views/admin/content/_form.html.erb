@@ -148,18 +148,18 @@
     </ul>
   </div>
 
-  <div class=''>
-    <h4><%= _("Merge Articles") %></h4>
-    <div class='class'>
-      <label for="merge_with"><%= _("Article ID")%></label>
-      <div class='input'>
-        <%= text_field :merge, :name, :class => 'span8'  %>
-      </div>
-      <div class='actions'>
-        <%= merge %>  
-      </div>
+  <div class='' style='<%= "display: none;" unless current_user.admin?  %>'>
+
+    <div class=''>
+      <h4><%= _("Merge Articles") %></h4>
+      <%= form_tag(:controller => 'admin/content', :action => 'merge', :method => "post") do %>
+          <input type="hidden" name="article_id" value="<%= @article.id %>" />
+          <%= label_tag('merge_article', "Article ID  ") %>
+          <%= text_field_tag(:merge_with) %>
+          <%= submit_tag("Merge") %>
+      <% end %>
     </div>
-  </div>
+
   </div>
 
 </div>

@@ -41,12 +41,31 @@ Given /^the blog is set up$/ do
                 :profile_id => 1,
                 :name => 'admin',
                 :state => 'active'})
+
+  User.create!({:login => 'publish',
+                :password => 'publish',
+                :email => 'fulano@theinternet.com',
+                :profile_id => 2,
+                :name => 'publish',
+                :state => 'active'})
 end
 
 And /^I am logged into the admin panel$/ do
   visit '/accounts/login'
   fill_in 'user_login', :with => 'admin'
   fill_in 'user_password', :with => 'aaaaaaaa'
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+end
+
+And /^I am not logged into the admin panel$/ do
+  visit '/accounts/login'
+  fill_in 'user_login', :with => 'publish'
+  fill_in 'user_password', :with => 'publish'
   click_button 'Login'
   if page.respond_to? :should
     page.should have_content('Login successful')
@@ -124,6 +143,21 @@ end
 
 When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"$/ do |path, field|
   attach_file(field, File.expand_path(path))
+end
+
+Then /^(?:|I )should see content for article (.+)$/ do |article_id|
+  current_path = URI.parse(current_url).path
+  visit '/admin/content/edit/'+ article_id
+  article_field = find_field('article__body_and_extended_editor')
+  article_text = article_field.text
+
+  visit current_path
+
+  if page.respond_to? :should
+    page.should have_content(article_text)
+  else
+    assert page.has_content?(article_text)
+  end
 end
 
 Then /^(?:|I )should see "([^"]*)"$/ do |text|

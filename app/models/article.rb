@@ -71,6 +71,7 @@ class Article < Content
     end
   end
 
+
   def set_permalink
     return if self.state == 'draft'
     self.permalink = self.title.to_permalink if self.permalink.nil? or self.permalink.empty?
@@ -95,6 +96,7 @@ class Article < Content
   include Article::States
 
   class << self
+
     def last_draft(article_id)
       article = Article.find(article_id)
       while article.has_child?
@@ -287,6 +289,14 @@ class Article < Content
       art.old_permalink = art.permalink_url unless art.permalink.nil? or art.permalink.empty?
       art.published = true
     end
+  end
+
+  def self.merge(article_id,merge_id)
+    current_article = Article.find(article_id)
+    merge_article   = Article.find(merge_id)
+
+    current_article.body_and_extended = current_article.body_and_extended + merge_article.body_and_extended
+    return current_article
   end
 
   # Finds one article which was posted on a certain date and matches the supplied dashed-title
